@@ -10,6 +10,22 @@ import (
 	"example.com/notes/todo"
 )
 
+// INTERFACES DEFINATION
+type saver interface {
+	Save() error
+}
+
+// type displayer interface {
+// 	Display()
+// }
+
+// EMBEDDED INTERFACES
+type outputtable interface {
+	saver
+	// displayer
+	Display()
+}
+
 func main() {
 	title, content := getNoteData()
 	userNote, err := note.New(title, content)
@@ -29,22 +45,30 @@ func main() {
 		return
 	}
 
-	todo.Display()
-	err = todo.Save()
+	err = outputData(todo)
 	if err != nil {
 		fmt.Println("Error saving todo:", err)
 		return
 	}
 
-	userNote.Display()
-	err = userNote.Save()
+	outputData(userNote)
+}
+
+func outputData(data outputtable) error {
+	data.Display()
+	return saveData(data)
+}
+
+func saveData(data saver) error {
+	err := data.Save()
 
 	if err != nil {
 		fmt.Println("Error saving note:", err)
-		return
+		return err
 	}
 
 	fmt.Println("Note saved successfully!")
+	return nil
 }
 
 // ----------------- NOTE PACKAGE
