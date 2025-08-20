@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"example.com/notes/note"
+	"example.com/notes/todo"
 )
 
 func main() {
@@ -15,6 +16,23 @@ func main() {
 
 	if err != nil {
 		fmt.Println("Error creating note:", err)
+		return
+	}
+
+	// Directly using the NOTES package, instead of creating a Function for the same.
+	todoText := getUserInput("Todo text: ")
+
+	todo, err := todo.New(todoText)
+
+	if err != nil {
+		fmt.Print(err)
+		return
+	}
+
+	todo.Display()
+	err = todo.Save()
+	if err != nil {
+		fmt.Println("Error saving todo:", err)
 		return
 	}
 
@@ -29,6 +47,12 @@ func main() {
 	fmt.Println("Note saved successfully!")
 }
 
+// ----------------- NOTE PACKAGE
+// func getTodoData() string {
+// 	return getUserInput("Todo text: ")
+// }
+
+// ----------------- NOTE PACKAGE
 func getNoteData() (string, string) {
 	title := getUserInput("Note Title: ")
 	content := getUserInput("Note content: ")
@@ -51,3 +75,5 @@ func getUserInput(prompt string) string {
 
 	return text
 }
+
+// Scope of improvement in this code will come in the form of INTERFACES!
